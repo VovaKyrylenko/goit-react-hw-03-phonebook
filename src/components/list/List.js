@@ -1,27 +1,39 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FriendListContainer, Span } from './List.styled';
 import FriendItem from 'components/ListItem/ListItem';
 
-function FriendList({ friends, deleteContactById }) {
-  return (
-    <>
-      <Span>Your contacts:</Span>
-      {friends.length === 0 ? (
-        <p>Nothing here</p>
-      ) : (
-        <FriendListContainer>
-          {friends.map(friend => (
-            <FriendItem
-              friend={friend}
-              deleteContactById={deleteContactById}
-              key={friend.id}
-            />
-          ))}
-        </FriendListContainer>
-      )}
-    </>
-  );
+class FriendList extends PureComponent {
+  LOCAL_ID = 'contacts';
+  areArraysIdentical(array1, array2) {
+    return JSON.stringify(array1) === JSON.stringify(array2);
+  }
+  componentDidUpdate(prevProps) {
+    if (!this.areArraysIdentical(prevProps.friends, this.props.friends)) {
+      localStorage.setItem(this.LOCAL_ID, JSON.stringify(this.props.friends));
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <Span>Your contacts:</Span>
+        {this.props.friends.length === 0 ? (
+          <p>Nothing here</p>
+        ) : (
+          <FriendListContainer>
+            {this.props.friends.map(friend => (
+              <FriendItem
+                friend={friend}
+                deleteContactById={this.props.deleteContactById}
+                key={friend.id}
+              />
+            ))}
+          </FriendListContainer>
+        )}
+      </>
+    );
+  }
 }
 
 FriendList.propTypes = {
