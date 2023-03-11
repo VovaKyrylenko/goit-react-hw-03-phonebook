@@ -7,6 +7,8 @@ import SearchBar from './Finder/Finder';
 import { Container } from './form/Form.styled';
 
 export class App extends Component {
+  LOCAL_ID = 'contacts';
+
   state = {
     contacts: [],
     filter: '',
@@ -60,6 +62,16 @@ export class App extends Component {
       .matches(/^[0-9]+$/, 'Invalid phone number'),
   });
 
+  componentDidMount() {
+    localStorage.getItem(this.LOCAL_ID) &&
+      this.setState({
+        contacts: JSON.parse(localStorage.getItem(this.LOCAL_ID)),
+      });
+    console.log(
+      'localStorage.getItem(this.LOCAL_ID):',
+      JSON.parse(localStorage.getItem(this.LOCAL_ID))
+    );
+  }
   render() {
     return (
       <>
@@ -78,6 +90,7 @@ export class App extends Component {
           <FriendList
             friends={this.handleFilter()}
             deleteContactById={this.deleteContactById}
+            storageId={this.LOCAL_ID}
           />
         </Container>
       </>

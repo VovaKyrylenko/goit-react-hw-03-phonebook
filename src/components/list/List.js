@@ -4,13 +4,15 @@ import { FriendListContainer, Span } from './List.styled';
 import FriendItem from 'components/ListItem/ListItem';
 
 class FriendList extends PureComponent {
-  LOCAL_ID = 'contacts';
   areArraysIdentical(array1, array2) {
     return JSON.stringify(array1) === JSON.stringify(array2);
   }
   componentDidUpdate(prevProps) {
     if (!this.areArraysIdentical(prevProps.friends, this.props.friends)) {
-      localStorage.setItem(this.LOCAL_ID, JSON.stringify(this.props.friends));
+      localStorage.setItem(
+        this.props.storageId,
+        JSON.stringify(this.props.friends)
+      );
     }
   }
 
